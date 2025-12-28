@@ -1,4 +1,5 @@
 import DashboardShell from "@/components/layout/dashboard-shell";
+import { DashboardContent } from "@/components/dashboard/dashboard-content";
 
 export default function Home() {
   return (
@@ -9,7 +10,7 @@ export default function Home() {
           Welcome back! Here is your learning progress.
         </p>
       </div>
-      {/* Dashboard content will go here */}
+      <DashboardContent />
     </DashboardShell>
   );
 }
