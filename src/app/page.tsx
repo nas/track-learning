@@ -1,7 +1,7 @@
 import DashboardShell from "@/components/layout/dashboard-shell";
 import { DashboardContent } from "@/components/dashboard/dashboard-content";
 import { AddItemDialog } from "@/components/dashboard/add-item-dialog";
-import { ViewerSplit } from "@/components/dashboard/viewer-split";
+import { PageViewerWrapper } from "@/components/dashboard/page-viewer-wrapper";
 
 export default async function Home({
   searchParams,
@@ -13,7 +13,7 @@ export default async function Home({
 
   return (
     <>
-      {viewerUrl && <ViewerSplit url={viewerUrl} />}
+      <PageViewerWrapper url={viewerUrl} />
       <DashboardShell>
         <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
           <div className="flex flex-col gap-1">
