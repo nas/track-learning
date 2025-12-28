@@ -23,9 +23,9 @@
     - [x] Sub-task: Write tests for clickable title and navigation behavior
 - [x] Task: Conductor - User Manual Verification 'Clickable Title and Navigation' (Protocol in workflow.md) (c9064d5)
 
-## Phase 4: Layout Split and Refinement
+## Phase 4: Layout Split and Refinement [checkpoint: 926edcc]
 - [x] Task: Implement 10%/90% Page Frame Split (7292dce)
     - [x] Sub-task: Design and implement the layout for URL display
     - [x] Sub-task: Ensure content inside the 90% section is correctly rendered
 - [x] Task: Final UI/UX Polish (styling, transitions) (7292dce)
-- [ ] Task: Conductor - User Manual Verification 'Layout Split and Refinement' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Layout Split and Refinement' (Protocol in workflow.md) (926edcc)
