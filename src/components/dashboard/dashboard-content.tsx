@@ -19,6 +19,11 @@ export function DashboardContent() {
                           item.author.toLowerCase().includes(search.toLowerCase())
     const matchesType = typeFilter === "All" || item.type === typeFilter
     return matchesSearch && matchesType
+  })?.sort((a, b) => {
+    // Put Archived items at the end
+    if (a.status === "Archived" && b.status !== "Archived") return 1
+    if (a.status !== "Archived" && b.status === "Archived") return -1
+    return 0
   })
 
   return (
