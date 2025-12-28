@@ -8,10 +8,10 @@
 - [x] Task: Conductor - User Manual Verification 'Foundation and Background' (Protocol in workflow.md) (cdb4d8c)
 
 ## Phase 2: Component Styling Refinements
-- [ ] Task: Refine ItemCard Design
-    - [ ] Sub-task: Update `ItemCard` typography (font weights, colors) and spacing (padding/margins)
-    - [ ] Sub-task: Redesign the progress bar component (thicker, rounded, gradient fill)
-    - [ ] Sub-task: Write/Update snapshot tests for `ItemCard` visual changes
+- [x] Task: Refine ItemCard Design (f0518bc)
+    - [x] Sub-task: Update `ItemCard` typography (font weights, colors) and spacing (padding/margins)
+    - [x] Sub-task: Redesign the progress bar component (thicker, rounded, gradient fill)
+    - [x] Sub-task: Write/Update snapshot tests for `ItemCard` visual changes
 - [ ] Task: Implement Icon-based Buttons
     - [ ] Sub-task: Create or update a reusable `Button` component variant for "Add", "Edit", "Archive" actions
     - [ ] Sub-task: Replace text links in `ItemCard` and `AddItemDialog` trigger with these new buttons
