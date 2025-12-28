@@ -11,8 +11,9 @@
 
 ## Phase 2: Dashboard UI & Read Integration
 - [x] Task: Setup Main Dashboard Layout and Responsive Shell [10cabaf]
-- [ ] Task: Create Dashboard Item Card component
-    - [ ] Sub-task: Write Tests for `ItemCard`
+- [x] Task: Create Dashboard Item Card component [bccaffb]
+    - [x] Sub-task: Write Tests for `ItemCard`
+    - [x] Sub-task: Implement `ItemCard` using Tailwind and Shadcn
     - [ ] Sub-task: Implement `ItemCard` using Tailwind and Shadcn
 - [ ] Task: Integrate TanStack Query for Dashboard Data Fetching
     - [ ] Sub-task: Write Tests for `useLearningItems` hook
