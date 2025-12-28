@@ -3,7 +3,7 @@
 ## Phase 1: Project Foundation & Data Layer
 - [x] Task: Initialize project with required dependencies (TanStack Query, Zod, date-fns, sonner, framer-motion, lucide-react, next-themes, clsx, tailwind-merge) [d92b6fc]
 - [x] Task: Setup `data/` directory and create initial `learning-items.json` with sample data [17c6979]
-- [ ] Task: Define Zod schemas for `LearningItem`, `LearningItemType`, and `LearningItemStatus`
+- [x] Task: Define Zod schemas for `LearningItem`, `LearningItemType`, and `LearningItemStatus` [f677ae9]
 - [ ] Task: Implement Data Access Layer (services/learningService.ts)
     - [ ] Sub-task: Write Tests for `learningService` (Reading/Writing JSON files)
     - [ ] Sub-task: Implement `learningService`
