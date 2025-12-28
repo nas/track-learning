@@ -1,0 +1,24 @@
+import { cn } from "@/lib/utils"
+
+export default function DashboardShell({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return (
+    <div className="flex min-h-screen flex-col space-y-6">
+      <header className="sticky top-0 z-40 border-b bg-background">
+        <div className="container flex h-16 items-center justify-between py-4 mx-auto px-4">
+          <div className="flex gap-6 md:gap-10">
+            <h1 className="text-xl font-bold">Learning Tracker</h1>
+          </div>
+        </div>
+      </header>
+      <main className={cn("container mx-auto px-4 grid flex-1 gap-12", className)}>
+        {children}
+      </main>
+    </div>
+  )
+}
