@@ -31,7 +31,7 @@ test('renders title as link when url is present', () => {
   )
   const link = screen.getByRole('link', { name: /Test Article/i })
   expect(link).toBeDefined()
-  expect(link.getAttribute('href')).toBe('https://example.com')
+  expect(link.getAttribute('href')).toBe('?viewer=https%3A%2F%2Fexample.com')
 })
 
 test('renders title as plain text when url is missing', () => {

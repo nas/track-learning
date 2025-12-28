@@ -6,8 +6,9 @@ vi.mock('@/components/dashboard/dashboard-content', () => ({
   DashboardContent: () => <div data-testid="dashboard-content" />
 }))
 
-test('renders dashboard heading', () => {
-  render(<Page />)
+test('renders dashboard heading', async () => {
+  const page = await Page({ searchParams: Promise.resolve({}) })
+  render(page)
   expect(screen.getByRole('heading', { name: /Learning Tracker/i })).toBeDefined()
   expect(screen.getByTestId('dashboard-content')).toBeDefined()
 })

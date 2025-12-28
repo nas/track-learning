@@ -28,7 +28,7 @@ export function ItemCard({ item, className }: ItemCardProps) {
       <div className="flex flex-col space-y-1.5 p-6">
         <div className="flex items-center justify-between">
           {item.url ? (
-            <Link href={item.url} target="_blank" rel="noopener noreferrer">
+            <Link href={`?viewer=${encodeURIComponent(item.url)}`}>
               {TitleContent}
             </Link>
           ) : (
