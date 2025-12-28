@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+import { ThemeToggle } from "./theme-toggle"
 
 export default function DashboardShell({
   children,
@@ -14,9 +15,10 @@ export default function DashboardShell({
           <div className="flex gap-6 md:gap-10">
             <h1 className="text-xl font-bold">Learning Tracker</h1>
           </div>
+          <ThemeToggle />
         </div>
       </header>
-      <main className={cn("container mx-auto px-4 grid flex-1 gap-12", className)}>
+      <main className={cn("container mx-auto px-4 grid flex-1 gap-12 pb-10", className)}>
         {children}
       </main>
     </div>
