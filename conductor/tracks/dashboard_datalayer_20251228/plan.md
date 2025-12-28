@@ -35,6 +35,6 @@
 - [x] Task: Implement Search Bar and Category Filtering [1125973]
     - [x] Sub-task: Write Tests for Search/Filter logic
     - [x] Sub-task: Implement UI controls and filter state in Dashboard
-- [ ] Task: Implement Dark Mode support using `next-themes`
+- [x] Task: Implement Dark Mode support using `next-themes` [4cdca69]
 - [ ] Task: Final UI/UX Polish and Animation implementation (Framer Motion)
 - [ ] Task: Conductor - User Manual Verification 'Search, Filtering & Polishing' (Protocol in workflow.md)
