@@ -1,12 +1,12 @@
 # Implementation Plan - Add URL to Learning Items
 
-## Phase 1: Data Model and Service Layer
+## Phase 1: Data Model and Service Layer [checkpoint: 99ec301]
 - [x] Task: Update Learning Item Schema and Service (c709988)
     - [x] Sub-task: Add 'url' field to Zod schema in `src/lib/schemas/learning-item.ts`
     - [x] Sub-task: Update `LearningItem` type
     - [x] Sub-task: Modify `addLearningItem` and `updateLearningItem` services to accept and save the URL
     - [x] Sub-task: Write tests for the updated `learningService` (CRUD operations with URL)
-- [ ] Task: Conductor - User Manual Verification 'Data Model and Service Layer' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Data Model and Service Layer' (Protocol in workflow.md) (99ec301)
 
 ## Phase 2: UI Integration for URL Input
 - [ ] Task: Add URL input field to Add/Edit Item forms
