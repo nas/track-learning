@@ -4,7 +4,14 @@ import { useAddItem } from './useAddItem'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import React from 'react'
 
-const newItem = { title: "New Item", author: "Me", type: "Article", status: "In Progress", progress: "0%" }
+const newItem = {
+  title: "New Item",
+  author: "Me",
+  type: "Article",
+  status: "In Progress",
+  progress: "0%",
+  startDate: "2025-01-01T00:00:00.000Z",
+}
 
 describe('useAddItem', () => {
   const queryClient = new QueryClient()

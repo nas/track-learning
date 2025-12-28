@@ -19,3 +19,6 @@ export const LearningItemSchema = z.object({
 })
 
 export type LearningItem = z.infer<typeof LearningItemSchema>
+
+export const AddLearningItemSchema = LearningItemSchema.omit({ id: true, lastUpdated: true })
+export type AddLearningItemInput = z.infer<typeof AddLearningItemSchema>

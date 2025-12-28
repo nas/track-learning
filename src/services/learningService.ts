@@ -1,6 +1,10 @@
 import fs from 'fs'
 import path from 'path'
-import { LearningItem, LearningItemSchema } from '../lib/schemas/learning-item'
+import {
+  AddLearningItemInput,
+  LearningItem,
+  LearningItemSchema,
+} from '../lib/schemas/learning-item'
 
 const DATA_PATH = path.resolve(process.cwd(), 'data/learning-items.json')
 
@@ -18,7 +22,9 @@ export async function getLearningItems(): Promise<LearningItem[]> {
   }
 }
 
-export async function addLearningItem(item: Omit<LearningItem, "id" | "lastUpdated">): Promise<LearningItem> {
+export async function addLearningItem(
+  item: AddLearningItemInput
+): Promise<LearningItem> {
   const items = await getLearningItems()
   
   const newItem: LearningItem = {

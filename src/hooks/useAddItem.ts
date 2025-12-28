@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { LearningItem } from '@/lib/schemas/learning-item'
+import { AddLearningItemInput } from '@/lib/schemas/learning-item'
 
 export function useAddItem() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (item: Partial<LearningItem>) => {
+    mutationFn: async (item: AddLearningItemInput) => {
       const response = await fetch('/api/learning-items', {
         method: 'POST',
         headers: {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
-import { AddItemForm } from './add-item-form'
+import { AddItemChat } from './add-item-chat'
 import { Button } from '@/components/ui/button'
 import { Plus, X } from 'lucide-react'
 
@@ -28,7 +28,7 @@ export function AddItemDialog() {
                   <X className="h-4 w-4" />
                 </Button>
             </div>
-            <AddItemForm onSuccess={() => setIsOpen(false)} />
+            <AddItemChat onSuccess={() => setIsOpen(false)} />
           </div>
         </div>,
         document.body
