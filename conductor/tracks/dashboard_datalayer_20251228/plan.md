@@ -20,8 +20,9 @@
 - [x] Task: Conductor - User Manual Verification 'Dashboard UI & Read Integration' (Protocol in workflow.md) [03f22c2]
 
 ## Phase 3: Item Management (Add, Update, Archive)
-- [ ] Task: Implement "Add Item" Modal and Form (React Hook Form + Zod)
-    - [ ] Sub-task: Write Tests for `AddItemForm`
+- [x] Task: Implement "Add Item" Modal and Form (React Hook Form + Zod) [0142223]
+    - [x] Sub-task: Write Tests for `AddItemForm`
+    - [x] Sub-task: Implement `AddItemForm` and Mutation logic
     - [ ] Sub-task: Implement `AddItemForm` and Mutation logic
 - [ ] Task: Implement Item Editing (Status and Progress updates)
     - [ ] Sub-task: Write Tests for Update logic
