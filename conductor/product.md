@@ -7,6 +7,7 @@ A personal learning tracker designed to monitor progress across books, online co
 
 ## Core Features
 - **Interactive Dashboard:** A grid-based view of all learning items with key metadata (Title, Author, Progress).
+- **Visual Progress Tracking:** Elegant, gradient-filled progress bars and friendly empty states.
 - **Integrated Learning Viewer:** Open associated URLs directly within the application in a dedicated split-view mode (10/90 layout).
 - **CRUD Operations:** Ability to add new items, update their progress/status, and archive them when completed or paused.
 - **Search & Filtering:** Real-time search by title/author and category filtering (Book, Course, Article).

@@ -8,6 +8,7 @@
 - **Tailwind CSS:** For efficient, utility-first styling.
 - **Radix UI Primitives:** Providing the accessible, unstyled foundation for our UI components.
 - **Shadcn UI:** Leveraged for high-level components, integrated with a focus on keeping the codebase lean and avoiding unnecessary file pollution.
+- **Custom UI Components:** Reusable, accessible components like `Button`, `ProgressBar`, and `EmptyState` built with Tailwind and Framer Motion.
 - **Lucide React:** A clean and modern icon set used throughout the application.
 - **Framer Motion:** Powering smooth, interactive animations and transitions.
 - **clsx & tailwind-merge:** Utilities for clean, conflict-free conditional class management.
