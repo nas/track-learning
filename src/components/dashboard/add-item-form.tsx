@@ -9,7 +9,7 @@ import { z } from 'zod'
 const AddItemSchema = LearningItemSchema.omit({ id: true, lastUpdated: true })
 type AddItemInput = z.infer<typeof AddItemSchema>
 
-export function AddItemForm() {
+export function AddItemForm({ onSuccess }: { onSuccess?: () => void }) {
   const { mutate, isPending } = useAddItem()
   const { register, handleSubmit, reset } = useForm<AddItemInput>({
     resolver: zodResolver(AddItemSchema),
@@ -27,6 +27,7 @@ export function AddItemForm() {
     mutate(data, {
         onSuccess: () => {
             reset()
+            onSuccess?.()
         }
     })
   }
@@ -61,7 +62,7 @@ export function AddItemForm() {
         <label htmlFor="progress" className="block text-sm font-medium">Progress</label>
         <input {...register("progress")} id="progress" className="border p-2 rounded w-full" />
       </div>
-      <button type="submit" disabled={isPending} className="bg-blue-500 text-white p-2 rounded">
+      <button type="submit" disabled={isPending} className="bg-blue-500 text-white p-2 rounded w-full">
         {isPending ? 'Adding...' : 'Add Item'}
       </button>
     </form>
