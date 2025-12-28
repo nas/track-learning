@@ -9,17 +9,15 @@
     - [x] Sub-task: Implement `learningService`
 - [x] Task: Conductor - User Manual Verification 'Foundation & Data Layer' (Protocol in workflow.md) [a4e2888]
 
-## Phase 2: Dashboard UI & Read Integration
+## Phase 2: Dashboard UI & Read Integration [checkpoint: 03f22c2]
 - [x] Task: Setup Main Dashboard Layout and Responsive Shell [10cabaf]
 - [x] Task: Create Dashboard Item Card component [bccaffb]
     - [x] Sub-task: Write Tests for `ItemCard`
     - [x] Sub-task: Implement `ItemCard` using Tailwind and Shadcn
-    - [ ] Sub-task: Implement `ItemCard` using Tailwind and Shadcn
 - [x] Task: Integrate TanStack Query for Dashboard Data Fetching [4abd756]
     - [x] Sub-task: Write Tests for `useLearningItems` hook
     - [x] Sub-task: Implement `useLearningItems` hook and integrate into Dashboard
-    - [ ] Sub-task: Implement `useLearningItems` hook and integrate into Dashboard
-- [ ] Task: Conductor - User Manual Verification 'Dashboard UI & Read Integration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Dashboard UI & Read Integration' (Protocol in workflow.md) [03f22c2]
 
 ## Phase 3: Item Management (Add, Update, Archive)
 - [ ] Task: Implement "Add Item" Modal and Form (React Hook Form + Zod)
