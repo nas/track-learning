@@ -8,12 +8,12 @@
     - [x] Sub-task: Write tests for the updated `learningService` (CRUD operations with URL)
 - [x] Task: Conductor - User Manual Verification 'Data Model and Service Layer' (Protocol in workflow.md) (99ec301)
 
-## Phase 2: UI Integration for URL Input
+## Phase 2: UI Integration for URL Input [checkpoint: 440e2df]
 - [x] Task: Add URL input field to Add/Edit Item forms (c47dec6)
     - [x] Sub-task: Update `AddItemForm` to include URL input
     - [x] Sub-task: Update `EditItemDialog` form to include URL input
     - [x] Sub-task: Write tests for the updated forms
-- [ ] Task: Conductor - User Manual Verification 'URL Input' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'URL Input' (Protocol in workflow.md) (440e2df)
 
 ## Phase 3: Clickable Title and Navigation Logic
 - [ ] Task: Make Item Title Clickable on Card
