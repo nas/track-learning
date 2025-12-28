@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "title": "The Pragmatic Programmer",
+    "author": "David Thomas, Andrew Hunt",
+    "type": "Book",
+    "status": "In Progress",
+    "progress": "Chapter 4",
+    "startDate": "2025-01-01T10:00:00Z",
+    "lastUpdated": "2025-01-02T15:30:00Z"
+  },
+  {
+    "id": "2",
+    "title": "Advanced React Patterns",
+    "author": "Kent C. Dodds",
+    "type": "Course",
+    "status": "Completed",
+    "progress": "100%",
+    "startDate": "2024-12-01T09:00:00Z",
+    "lastUpdated": "2024-12-15T18:00:00Z"
+  }
+]
