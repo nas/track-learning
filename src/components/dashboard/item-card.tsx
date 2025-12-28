@@ -1,6 +1,9 @@
+'use client'
+
 import { LearningItem } from "@/lib/schemas/learning-item";
 import { cn } from "@/lib/utils";
 import { EditItemDialog } from "./edit-item-dialog";
+import { motion } from "framer-motion";
 
 interface ItemCardProps {
   item: LearningItem;
@@ -9,7 +12,10 @@ interface ItemCardProps {
 
 export function ItemCard({ item, className }: ItemCardProps) {
   return (
-    <div className={cn("rounded-xl border bg-card text-card-foreground shadow flex flex-col justify-between", className)}>
+    <motion.div 
+      whileHover={{ y: -4 }}
+      className={cn("rounded-xl border bg-card text-card-foreground shadow flex flex-col justify-between h-full", className)}
+    >
       <div className="flex flex-col space-y-1.5 p-6">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold leading-none tracking-tight">{item.title}</h3>
@@ -28,6 +34,6 @@ export function ItemCard({ item, className }: ItemCardProps) {
             <EditItemDialog item={item} />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

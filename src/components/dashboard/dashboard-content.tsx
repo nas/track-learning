@@ -4,6 +4,7 @@ import { useLearningItems } from "@/hooks/useLearningItems"
 import { ItemCard } from "./item-card"
 import { SearchFilters } from "./search-filters"
 import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 
 export function DashboardContent() {
   const { data: items, isLoading, isError } = useLearningItems()
@@ -17,9 +18,6 @@ export function DashboardContent() {
     const matchesSearch = item.title.toLowerCase().includes(search.toLowerCase()) || 
                           item.author.toLowerCase().includes(search.toLowerCase())
     const matchesType = typeFilter === "All" || item.type === typeFilter
-    // We might also want to exclude Archived items from main view by default?
-    // The spec didn't specify, but usually they are hidden.
-    // I'll keep them for now as per spec "Dashboard displays all items".
     return matchesSearch && matchesType
   })
 
@@ -31,15 +29,34 @@ export function DashboardContent() {
         typeFilter={typeFilter}
         onTypeFilterChange={setTypeFilter}
       />
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3" aria-label="learning-items-grid">
-        {filteredItems?.map((item) => (
-          <ItemCard key={item.id} item={item} />
-        ))}
-      </div>
+      <motion.div 
+        layout
+        className="grid gap-4 md:grid-cols-2 lg:grid-cols-3" 
+        aria-label="learning-items-grid"
+      >
+        <AnimatePresence mode="popLayout">
+          {filteredItems?.map((item) => (
+            <motion.div
+              key={item.id}
+              layout
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ItemCard item={item} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
       {filteredItems?.length === 0 && (
-        <div className="text-center py-10 text-muted-foreground border rounded-lg border-dashed">
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-10 text-muted-foreground border rounded-lg border-dashed"
+        >
             No items found matching your search.
-        </div>
+        </motion.div>
       )}
     </div>
   )
