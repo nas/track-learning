@@ -24,12 +24,12 @@
     - [x] Sub-task: Write Tests for `AddItemForm`
     - [x] Sub-task: Implement `AddItemForm` and Mutation logic
     - [ ] Sub-task: Implement `AddItemForm` and Mutation logic
-- [ ] Task: Implement Item Editing (Status and Progress updates)
-    - [ ] Sub-task: Write Tests for Update logic
-    - [ ] Sub-task: Implement UI and Mutation for updating items
-- [ ] Task: Implement Archiving functionality
-    - [ ] Sub-task: Write Tests for Archiving logic
-    - [ ] Sub-task: Implement Archive action in UI
+- [x] Task: Implement Item Editing (Status and Progress updates) [29fd235]
+    - [x] Sub-task: Write Tests for Update logic
+    - [x] Sub-task: Implement UI and Mutation for updating items
+- [x] Task: Implement Archiving functionality [29fd235]
+    - [x] Sub-task: Write Tests for Archiving logic
+    - [x] Sub-task: Implement Archive action in UI
 - [ ] Task: Conductor - User Manual Verification 'Item Management' (Protocol in workflow.md)
 
 ## Phase 4: Search, Filtering & Polishing
