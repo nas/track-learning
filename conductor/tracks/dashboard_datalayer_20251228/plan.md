@@ -15,8 +15,9 @@
     - [x] Sub-task: Write Tests for `ItemCard`
     - [x] Sub-task: Implement `ItemCard` using Tailwind and Shadcn
     - [ ] Sub-task: Implement `ItemCard` using Tailwind and Shadcn
-- [ ] Task: Integrate TanStack Query for Dashboard Data Fetching
-    - [ ] Sub-task: Write Tests for `useLearningItems` hook
+- [x] Task: Integrate TanStack Query for Dashboard Data Fetching [4abd756]
+    - [x] Sub-task: Write Tests for `useLearningItems` hook
+    - [x] Sub-task: Implement `useLearningItems` hook and integrate into Dashboard
     - [ ] Sub-task: Implement `useLearningItems` hook and integrate into Dashboard
 - [ ] Task: Conductor - User Manual Verification 'Dashboard UI & Read Integration' (Protocol in workflow.md)
 
