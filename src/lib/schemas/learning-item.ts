@@ -13,6 +13,7 @@ export const LearningItemSchema = z.object({
   type: LearningItemType,
   status: LearningItemStatus,
   progress: z.string().min(1, "Progress is required"),
+  url: z.string().optional(),
   startDate: z.string().datetime(),
   lastUpdated: z.string().datetime(),
 })
