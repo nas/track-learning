@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { AddItemForm } from './add-item-form'
 
 export function AddItemDialog() {
@@ -15,8 +16,8 @@ export function AddItemDialog() {
         Add Item
       </button>
       
-      {isOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+      {isOpen && createPortal(
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 text-foreground">
           <div className="bg-background p-6 rounded-lg shadow-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-bold">Add New Learning Item</h3>
@@ -24,7 +25,8 @@ export function AddItemDialog() {
             </div>
             <AddItemForm onSuccess={() => setIsOpen(false)} />
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   )

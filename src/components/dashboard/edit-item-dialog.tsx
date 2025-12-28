@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LearningItem, LearningItemSchema, LearningItemStatus } from '@/lib/schemas/learning-item'
@@ -48,14 +49,14 @@ export function EditItemDialog({ item, trigger }: EditItemDialogProps) {
         {trigger || <button className="text-sm text-blue-500">Edit</button>}
       </div>
       
-      {isOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+      {isOpen && createPortal(
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 text-foreground">
           <div className="bg-background p-6 rounded-lg shadow-lg w-full max-w-md">
             <h3 className="text-lg font-bold mb-4">Edit Item</h3>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div>
                 <label htmlFor="status" className="block text-sm font-medium">Status</label>
-                <select {...register("status")} id="status" className="border p-2 rounded w-full">
+                <select {...register("status")} id="status" className="border p-2 rounded w-full bg-background">
                     {LearningItemStatus.options.map(s => (
                         <option key={s} value={s}>{s}</option>
                     ))}
@@ -63,7 +64,7 @@ export function EditItemDialog({ item, trigger }: EditItemDialogProps) {
               </div>
               <div>
                 <label htmlFor="progress" className="block text-sm font-medium">Progress</label>
-                <input {...register("progress")} id="progress" className="border p-2 rounded w-full" />
+                <input {...register("progress")} id="progress" className="border p-2 rounded w-full bg-background" />
               </div>
               <div className="flex justify-between items-center pt-4">
                 <button type="button" onClick={onArchive} className="text-red-500 text-sm hover:underline">
@@ -78,7 +79,8 @@ export function EditItemDialog({ item, trigger }: EditItemDialogProps) {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   )

@@ -36,15 +36,15 @@ export function AddItemForm({ onSuccess }: { onSuccess?: () => void }) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
         <label htmlFor="title" className="block text-sm font-medium">Title</label>
-        <input {...register("title")} id="title" className="border p-2 rounded w-full" />
+        <input {...register("title")} id="title" className="border p-2 rounded w-full bg-background" />
       </div>
       <div>
         <label htmlFor="author" className="block text-sm font-medium">Author</label>
-        <input {...register("author")} id="author" className="border p-2 rounded w-full" />
+        <input {...register("author")} id="author" className="border p-2 rounded w-full bg-background" />
       </div>
       <div>
         <label htmlFor="type" className="block text-sm font-medium">Type</label>
-        <select {...register("type")} id="type" className="border p-2 rounded w-full">
+        <select {...register("type")} id="type" className="border p-2 rounded w-full bg-background">
             {LearningItemType.options.map(t => (
                 <option key={t} value={t}>{t}</option>
             ))}
@@ -52,7 +52,7 @@ export function AddItemForm({ onSuccess }: { onSuccess?: () => void }) {
       </div>
       <div>
         <label htmlFor="status" className="block text-sm font-medium">Status</label>
-        <select {...register("status")} id="status" className="border p-2 rounded w-full">
+        <select {...register("status")} id="status" className="border p-2 rounded w-full bg-background">
             {LearningItemStatus.options.map(s => (
                 <option key={s} value={s}>{s}</option>
             ))}
@@ -60,7 +60,7 @@ export function AddItemForm({ onSuccess }: { onSuccess?: () => void }) {
       </div>
       <div>
         <label htmlFor="progress" className="block text-sm font-medium">Progress</label>
-        <input {...register("progress")} id="progress" className="border p-2 rounded w-full" />
+        <input {...register("progress")} id="progress" className="border p-2 rounded w-full bg-background" />
       </div>
       <button type="submit" disabled={isPending} className="bg-blue-500 text-white p-2 rounded w-full">
         {isPending ? 'Adding...' : 'Add Item'}
