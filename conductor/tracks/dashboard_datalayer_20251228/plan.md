@@ -10,7 +10,7 @@
 - [x] Task: Conductor - User Manual Verification 'Foundation & Data Layer' (Protocol in workflow.md) [a4e2888]
 
 ## Phase 2: Dashboard UI & Read Integration
-- [ ] Task: Setup Main Dashboard Layout and Responsive Shell
+- [x] Task: Setup Main Dashboard Layout and Responsive Shell [10cabaf]
 - [ ] Task: Create Dashboard Item Card component
     - [ ] Sub-task: Write Tests for `ItemCard`
     - [ ] Sub-task: Implement `ItemCard` using Tailwind and Shadcn
