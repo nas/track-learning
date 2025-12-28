@@ -2,14 +2,17 @@
 
 ## Project Structure & Module Organization
 - `conductor/` holds project docs: `product.md`, `tech-stack.md`, `workflow.md`, and code style guides in `conductor/code_styleguides/`.
-- Application source code has not been scaffolded yet. When the Next.js app is initialized, place app code at the repo root with a standard `app/` (App Router), `components/`, and `tests/` layout.
+- Next.js App Router source lives in `src/app/` with the global styles in `src/app/globals.css`.
+- Shared UI and domain modules should go in `src/components/` and `src/lib/` as they are introduced.
+- Static assets belong in `public/`.
 
 ## Build, Test, and Development Commands
-No build tooling is committed yet (no `package.json`). Once the Next.js app is scaffolded, standard commands should include:
 - `npm install`: install dependencies.
-- `npm run dev`: start the local dev server.
-- `npm run test`: run unit tests (Vitest).
-- `npm run lint`: run linting.
+- `npm run dev`: start the local Next.js dev server.
+- `npm run build`: build the production bundle.
+- `npm run start`: run the production server after a build.
+- `npm run lint`: run ESLint.
+- Tests are not wired yet; use `npm run test` once Vitest is added.
 
 ## Coding Style & Naming Conventions
 - TypeScript follows the Google TypeScript style guide (`conductor/code_styleguides/typescript.md`). Key rules: use `const`/`let` (no `var`), named exports only, semicolons required, single quotes for strings, `UpperCamelCase` for types/classes and `lowerCamelCase` for functions/variables.
