@@ -1,0 +1,40 @@
+# Implementation Plan - Dashboard Core and Data Layer
+
+## Phase 1: Project Foundation & Data Layer
+- [x] Task: Initialize project with required dependencies (TanStack Query, Zod, date-fns, sonner, framer-motion, lucide-react, next-themes, clsx, tailwind-merge) [d92b6fc]
+- [ ] Task: Setup `data/` directory and create initial `learning-items.json` with sample data
+- [ ] Task: Define Zod schemas for `LearningItem`, `LearningItemType`, and `LearningItemStatus`
+- [ ] Task: Implement Data Access Layer (services/learningService.ts)
+    - [ ] Sub-task: Write Tests for `learningService` (Reading/Writing JSON files)
+    - [ ] Sub-task: Implement `learningService`
+- [ ] Task: Conductor - User Manual Verification 'Foundation & Data Layer' (Protocol in workflow.md)
+
+## Phase 2: Dashboard UI & Read Integration
+- [ ] Task: Setup Main Dashboard Layout and Responsive Shell
+- [ ] Task: Create Dashboard Item Card component
+    - [ ] Sub-task: Write Tests for `ItemCard`
+    - [ ] Sub-task: Implement `ItemCard` using Tailwind and Shadcn
+- [ ] Task: Integrate TanStack Query for Dashboard Data Fetching
+    - [ ] Sub-task: Write Tests for `useLearningItems` hook
+    - [ ] Sub-task: Implement `useLearningItems` hook and integrate into Dashboard
+- [ ] Task: Conductor - User Manual Verification 'Dashboard UI & Read Integration' (Protocol in workflow.md)
+
+## Phase 3: Item Management (Add, Update, Archive)
+- [ ] Task: Implement "Add Item" Modal and Form (React Hook Form + Zod)
+    - [ ] Sub-task: Write Tests for `AddItemForm`
+    - [ ] Sub-task: Implement `AddItemForm` and Mutation logic
+- [ ] Task: Implement Item Editing (Status and Progress updates)
+    - [ ] Sub-task: Write Tests for Update logic
+    - [ ] Sub-task: Implement UI and Mutation for updating items
+- [ ] Task: Implement Archiving functionality
+    - [ ] Sub-task: Write Tests for Archiving logic
+    - [ ] Sub-task: Implement Archive action in UI
+- [ ] Task: Conductor - User Manual Verification 'Item Management' (Protocol in workflow.md)
+
+## Phase 4: Search, Filtering & Polishing
+- [ ] Task: Implement Search Bar and Category Filtering
+    - [ ] Sub-task: Write Tests for Search/Filter logic
+    - [ ] Sub-task: Implement UI controls and filter state in Dashboard
+- [ ] Task: Implement Dark Mode support using `next-themes`
+- [ ] Task: Final UI/UX Polish and Animation implementation (Framer Motion)
+- [ ] Task: Conductor - User Manual Verification 'Search, Filtering & Polishing' (Protocol in workflow.md)
