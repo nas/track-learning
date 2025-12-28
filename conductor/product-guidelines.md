@@ -1,16 +1,17 @@
 # Product Guidelines - Learning Tracker
 
 ## Visual Identity
-- **Theme:** Clean, modern, and minimalist.
-- **Color Palette:** Professional and calm (e.g., slate grays, soft blues, and crisp whites).
-- **Typography:** Clear, sans-serif fonts for high readability.
+- **Theme:** Warm, friendly, and inviting. The design should feel personal and encouraging, like a helpful learning companion.
+- **Color Palette:** Utilize a palette of softer, natural tones (e.g., muted greens, earthy browns, warm grays) to create a calming and approachable aesthetic. Avoid harsh contrasts.
+- **Typography:** Employ readable, slightly rounded sans-serif fonts for body text and headings to enhance the friendly feel.
+- **Imagery/Icons:** Use friendly, perhaps slightly illustrative icons. Avoid overly corporate or stark visuals.
 
 ## User Interface (UI)
-- **Component Library:** Use a modern React component library (e.g., Tailwind CSS with Headless UI or Radix UI) for consistency and speed.
-- **Interactions:** Use subtle transitions and clear feedback for user actions (e.g., modal opening, form submission).
-- **Responsiveness:** Ensure the layout adapts gracefully to different screen sizes.
+- **Component Style:** Components should have soft edges and subtle shadows, reinforcing the warm, organic feel. Avoid sharp corners.
+- **Interactions:** UI feedback should be gentle and clear. Transitions should be smooth and not jarring. For example, modal openings could have a soft fade-in effect.
+- **Responsiveness:** Ensure the layout adapts gracefully to different screen sizes, maintaining the friendly feel across devices.
 
 ## Prose & Tone
-- **Tone:** Practical, encouraging, and direct.
-- **Messaging:** Keep labels and instructions concise and helpful.
-- **Feedback:** Provide clear success/error messages for all user interactions.
+- **Tone:** Consistently friendly, conversational, and encouraging. Imagine speaking to a helpful study buddy.
+- **Messaging:** Use inclusive language ("Let's track your progress!", "What did you learn today?"). Keep instructions simple and supportive.
+- **Feedback:** Provide clear, positive, and helpful messages for all user interactions. Error messages should be constructive rather than alarming.
