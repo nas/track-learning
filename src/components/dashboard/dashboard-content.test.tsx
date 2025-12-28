@@ -54,3 +54,37 @@ test('DashboardContent displays Archived items at the end', async () => {
   // Archived item should be last
   expect(itemTitles[itemTitles.length - 1]).toContain("Archived Item")
 })
+
+test('DashboardContent displays loading state', async () => {
+  vi.mocked(useLearningItems).mockReturnValue({
+    data: undefined,
+    isLoading: true,
+    isError: false,
+  } as any)
+
+  const queryClient = new QueryClient()
+  render(
+    <QueryClientProvider client={queryClient}>
+      <DashboardContent />
+    </QueryClientProvider>
+  )
+
+  expect(screen.getByText(/Gathering your progress/i)).toBeInTheDocument()
+})
+
+test('DashboardContent displays empty state when no items', async () => {
+  vi.mocked(useLearningItems).mockReturnValue({
+    data: [],
+    isLoading: false,
+    isError: false,
+  } as any)
+
+  const queryClient = new QueryClient()
+  render(
+    <QueryClientProvider client={queryClient}>
+      <DashboardContent />
+    </QueryClientProvider>
+  )
+
+  expect(screen.getByText(/Your dashboard is empty/i)).toBeInTheDocument()
+})
