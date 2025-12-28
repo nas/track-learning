@@ -19,6 +19,7 @@ export function AddItemForm({ onSuccess }: { onSuccess?: () => void }) {
         type: "Book",
         status: "In Progress",
         progress: "0%",
+        url: "",
         startDate: new Date().toISOString()
     }
   })
@@ -61,6 +62,10 @@ export function AddItemForm({ onSuccess }: { onSuccess?: () => void }) {
       <div>
         <label htmlFor="progress" className="block text-sm font-medium">Progress</label>
         <input {...register("progress")} id="progress" className="border p-2 rounded w-full bg-background" />
+      </div>
+      <div>
+        <label htmlFor="url" className="block text-sm font-medium">URL</label>
+        <input {...register("url")} id="url" type="url" className="border p-2 rounded w-full bg-background" placeholder="https://..." />
       </div>
       <button type="submit" disabled={isPending} className="bg-blue-500 text-white p-2 rounded w-full">
         {isPending ? 'Adding...' : 'Add Item'}

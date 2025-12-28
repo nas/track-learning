@@ -8,7 +8,7 @@ import { LearningItem, LearningItemSchema, LearningItemStatus } from '@/lib/sche
 import { useUpdateItem } from '@/hooks/useUpdateItem'
 import { z } from 'zod'
 
-const EditItemSchema = LearningItemSchema.pick({ status: true, progress: true })
+const EditItemSchema = LearningItemSchema.pick({ status: true, progress: true, url: true })
 type EditItemInput = z.infer<typeof EditItemSchema>
 
 interface EditItemDialogProps {
@@ -23,7 +23,8 @@ export function EditItemDialog({ item, trigger }: EditItemDialogProps) {
     resolver: zodResolver(EditItemSchema),
     defaultValues: {
         status: item.status,
-        progress: item.progress
+        progress: item.progress,
+        url: item.url || ""
     }
   })
 
@@ -65,6 +66,10 @@ export function EditItemDialog({ item, trigger }: EditItemDialogProps) {
               <div>
                 <label htmlFor="progress" className="block text-sm font-medium">Progress</label>
                 <input {...register("progress")} id="progress" className="border p-2 rounded w-full bg-background" />
+              </div>
+              <div>
+                <label htmlFor="url" className="block text-sm font-medium">URL</label>
+                <input {...register("url")} id="url" type="url" className="border p-2 rounded w-full bg-background" placeholder="https://..." />
               </div>
               <div className="flex justify-between items-center pt-4">
                 <button type="button" onClick={onArchive} className="text-red-500 text-sm hover:underline">
