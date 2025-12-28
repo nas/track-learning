@@ -4,8 +4,9 @@
 - [x] Task: Initialize project with required dependencies (TanStack Query, Zod, date-fns, sonner, framer-motion, lucide-react, next-themes, clsx, tailwind-merge) [d92b6fc]
 - [x] Task: Setup `data/` directory and create initial `learning-items.json` with sample data [17c6979]
 - [x] Task: Define Zod schemas for `LearningItem`, `LearningItemType`, and `LearningItemStatus` [f677ae9]
-- [ ] Task: Implement Data Access Layer (services/learningService.ts)
-    - [ ] Sub-task: Write Tests for `learningService` (Reading/Writing JSON files)
+- [x] Task: Implement Data Access Layer (services/learningService.ts) [afc440f]
+    - [x] Sub-task: Write Tests for `learningService` (Reading/Writing JSON files)
+    - [x] Sub-task: Implement `learningService`
     - [ ] Sub-task: Implement `learningService`
 - [ ] Task: Conductor - User Manual Verification 'Foundation & Data Layer' (Protocol in workflow.md)
 
