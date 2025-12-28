@@ -3,25 +3,30 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AddItemForm } from './add-item-form'
+import { Button } from '@/components/ui/button'
+import { Plus, X } from 'lucide-react'
 
 export function AddItemDialog() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <>
-      <button 
+      <Button 
         onClick={() => setIsOpen(true)}
-        className="bg-primary text-primary-foreground px-4 py-2 rounded-md font-medium hover:bg-primary/90 transition-colors"
+        className="gap-2"
       >
+        <Plus className="h-4 w-4" />
         Add Item
-      </button>
+      </Button>
       
       {isOpen && createPortal(
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 text-foreground">
-          <div className="bg-background p-6 rounded-lg shadow-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-bold">Add New Learning Item</h3>
-                <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-gray-700 p-1">✕</button>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 text-foreground">
+          <div className="bg-background p-7 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto border">
+            <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold tracking-tight">Add Learning Item</h3>
+                <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="rounded-full">
+                  <X className="h-4 w-4" />
+                </Button>
             </div>
             <AddItemForm onSuccess={() => setIsOpen(false)} />
           </div>

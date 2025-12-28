@@ -64,7 +64,7 @@ test('archives item', async () => {
 
   fireEvent.click(screen.getByRole('button', { name: /Edit/i }))
   
-  fireEvent.click(screen.getByRole('button', { name: /Archive Item/i }))
+  fireEvent.click(screen.getByRole('button', { name: /Archive/i }))
 
   await waitFor(() => expect(mutate).toHaveBeenCalledWith(
     expect.objectContaining({

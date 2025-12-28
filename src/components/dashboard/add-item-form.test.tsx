@@ -23,7 +23,7 @@ test('submits form with valid data', async () => {
   fireEvent.change(screen.getByLabelText(/Title/i), { target: { value: 'New Book' } })
   fireEvent.change(screen.getByLabelText(/Author/i), { target: { value: 'Author' } })
   
-  fireEvent.click(screen.getByRole('button', { name: /Add Item/i }))
+  fireEvent.click(screen.getByRole('button', { name: /Add Learning Item/i }))
 
   await waitFor(() => expect(mutate).toHaveBeenCalled())
 })

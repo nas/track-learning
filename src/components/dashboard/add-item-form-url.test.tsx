@@ -24,7 +24,7 @@ test('submits form with url', async () => {
   fireEvent.change(screen.getByLabelText(/Author/i), { target: { value: 'Author' } })
   fireEvent.change(screen.getByLabelText(/URL/i), { target: { value: 'https://example.com' } })
   
-  fireEvent.click(screen.getByRole('button', { name: /Add Item/i }))
+  fireEvent.click(screen.getByRole('button', { name: /Add Learning Item/i }))
 
   await waitFor(() => expect(mutate).toHaveBeenCalledWith(
     expect.objectContaining({
