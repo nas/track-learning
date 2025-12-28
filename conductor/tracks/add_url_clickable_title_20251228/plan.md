@@ -9,10 +9,10 @@
 - [x] Task: Conductor - User Manual Verification 'Data Model and Service Layer' (Protocol in workflow.md) (99ec301)
 
 ## Phase 2: UI Integration for URL Input
-- [ ] Task: Add URL input field to Add/Edit Item forms
-    - [ ] Sub-task: Update `AddItemForm` to include URL input
-    - [ ] Sub-task: Update `EditItemDialog` form to include URL input
-    - [ ] Sub-task: Write tests for the updated forms
+- [x] Task: Add URL input field to Add/Edit Item forms (c47dec6)
+    - [x] Sub-task: Update `AddItemForm` to include URL input
+    - [x] Sub-task: Update `EditItemDialog` form to include URL input
+    - [x] Sub-task: Write tests for the updated forms
 - [ ] Task: Conductor - User Manual Verification 'URL Input' (Protocol in workflow.md)
 
 ## Phase 3: Clickable Title and Navigation Logic
