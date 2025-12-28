@@ -15,13 +15,13 @@
     - [x] Sub-task: Write tests for the updated forms
 - [x] Task: Conductor - User Manual Verification 'URL Input' (Protocol in workflow.md) (440e2df)
 
-## Phase 3: Clickable Title and Navigation Logic
+## Phase 3: Clickable Title and Navigation Logic [checkpoint: c9064d5]
 - [x] Task: Make Item Title Clickable on Card (26c2260)
     - [x] Sub-task: Modify `ItemCard` component to render title as a link
     - [x] Sub-task: Implement logic to open URL in a 90% section of the page
     - [x] Sub-task: Add external link icon for visual indication
     - [x] Sub-task: Write tests for clickable title and navigation behavior
-- [ ] Task: Conductor - User Manual Verification 'Clickable Title and Navigation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Clickable Title and Navigation' (Protocol in workflow.md) (c9064d5)
 
 ## Phase 4: Layout Split and Refinement
 - [ ] Task: Implement 10%/90% Page Frame Split
