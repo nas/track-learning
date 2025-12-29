@@ -288,7 +288,9 @@ export async function parseEditItemFromMessage(
 const SearchCriteriaSchema = z.object({
   searchText: z.string().optional(),
   type: LearningItemType.optional(),
+  excludeType: LearningItemType.optional(),
   status: LearningItemStatus.optional(),
+  excludeStatus: LearningItemStatus.optional(),
   progressMin: z.string().optional(),
   progressMax: z.string().optional(),
 })
@@ -299,18 +301,28 @@ function buildSearchSystemPrompt() {
   return [
     'You extract search criteria from a user search query.',
     'Return ONLY a JSON object with these optional keys:',
-    'searchText, type, status, progressMin, progressMax.',
+    'searchText, type, excludeType, status, excludeStatus, progressMin, progressMax.',
     '',
     'Rules:',
     '- searchText: keywords to search in title or author (e.g., "pragmatic", "programming")',
-    '- type: one of "Book", "Course", "Article" if user specifies a type',
-    '- status: one of "In Progress", "Completed", "On Hold", "Archived" if user specifies a status',
+    '- type: one of "Book", "Course", "Article" if user specifies a type to include',
+    '- excludeType: one of "Book", "Course", "Article" if user wants to exclude a type',
+    '- status: one of "In Progress", "Completed", "On Hold", "Archived" if user specifies a status to include',
+    '- excludeStatus: one of "In Progress", "Completed", "On Hold", "Archived" if user wants to exclude a status',
     '- progressMin: minimum progress (e.g., "50%" for "more than 50%", "at least 50%")',
     '- progressMax: maximum progress (e.g., "30%" for "less than 30%", "under 30%")',
     '- If user says "completed items", set status to "Completed"',
     '- If user says "in progress", set status to "In Progress"',
     '- If user says "archived", set status to "Archived"',
-    '- If user mentions a book/course/article type, set the type field',
+    '- If user says "not archived", "non-archived", "exclude archived", or "without archived", set excludeStatus to "Archived"',
+    '- If user says "not completed", "non-completed", "exclude completed", set excludeStatus to "Completed"',
+    '- If user says "not in progress", "exclude in progress", set excludeStatus to "In Progress"',
+    '- If user says "books", "book", set type to "Book"',
+    '- If user says "courses", "course", set type to "Course"',
+    '- If user says "articles", "article", set type to "Article"',
+    '- If user says "not a book", "not books", "exclude books", "non-books", set excludeType to "Book"',
+    '- If user says "not a course", "not courses", "exclude courses", "non-courses", set excludeType to "Course"',
+    '- If user says "not an article", "not articles", "exclude articles", "non-articles", set excludeType to "Article"',
     '- Extract keywords from the query for searchText',
     '- If no specific criteria, return empty object or just searchText',
   ].join('\n')
@@ -325,8 +337,14 @@ function normalizeSearchCriteria(parsed: SearchCriteria) {
   if (parsed.type !== undefined) {
     normalized.type = parsed.type
   }
+  if (parsed.excludeType !== undefined) {
+    normalized.excludeType = parsed.excludeType
+  }
   if (parsed.status !== undefined) {
     normalized.status = parsed.status
+  }
+  if (parsed.excludeStatus !== undefined) {
+    normalized.excludeStatus = parsed.excludeStatus
   }
   if (parsed.progressMin !== undefined && parsed.progressMin.trim()) {
     normalized.progressMin = parsed.progressMin.trim()

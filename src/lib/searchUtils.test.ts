@@ -92,6 +92,51 @@ describe('applySearchCriteria', () => {
     expect(result[0].title).toBe('The Pragmatic Programmer')
   })
 
+  test('filters by excluded status', () => {
+    const criteria: SearchCriteria = { excludeStatus: 'Archived' }
+    const result = applySearchCriteria(mockItems, criteria)
+    expect(result).toHaveLength(2)
+    expect(result.every(item => item.status !== 'Archived')).toBe(true)
+  })
+
+  test('filters by excluded status with other criteria', () => {
+    const criteria: SearchCriteria = {
+      excludeStatus: 'Archived',
+      type: 'Book',
+    }
+    const result = applySearchCriteria(mockItems, criteria)
+    expect(result).toHaveLength(1)
+    expect(result[0].type).toBe('Book')
+    expect(result[0].status).not.toBe('Archived')
+  })
+
+  test('filters by excluded type', () => {
+    const criteria: SearchCriteria = { excludeType: 'Book' }
+    const result = applySearchCriteria(mockItems, criteria)
+    expect(result).toHaveLength(2)
+    expect(result.every(item => item.type !== 'Book')).toBe(true)
+  })
+
+  test('filters by excluded type with other criteria', () => {
+    const criteria: SearchCriteria = {
+      excludeType: 'Book',
+      status: 'In Progress',
+    }
+    const result = applySearchCriteria(mockItems, criteria)
+    expect(result).toHaveLength(0) // The only "In Progress" item is a Book, so it's excluded
+  })
+
+  test('filters by excluded type and excluded status', () => {
+    const criteria: SearchCriteria = {
+      excludeType: 'Book',
+      excludeStatus: 'Archived',
+    }
+    const result = applySearchCriteria(mockItems, criteria)
+    expect(result).toHaveLength(1)
+    expect(result[0].type).toBe('Course')
+    expect(result[0].status).toBe('Completed')
+  })
+
   test('returns all items when no criteria', () => {
     const criteria: SearchCriteria = {}
     const result = applySearchCriteria(mockItems, criteria)

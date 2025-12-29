@@ -3,7 +3,9 @@ import { useMutation } from '@tanstack/react-query'
 export type SearchCriteria = {
   searchText?: string
   type?: string
+  excludeType?: string
   status?: string
+  excludeStatus?: string
   progressMin?: string
   progressMax?: string
 }

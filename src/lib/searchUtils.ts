@@ -37,13 +37,23 @@ export function applySearchCriteria(
       }
     }
 
-    // Type filter
+    // Type filter (include)
     if (criteria.type && item.type !== criteria.type) {
       return false
     }
 
-    // Status filter
+    // Type filter (exclude)
+    if (criteria.excludeType && item.type === criteria.excludeType) {
+      return false
+    }
+
+    // Status filter (include)
     if (criteria.status && item.status !== criteria.status) {
+      return false
+    }
+
+    // Status filter (exclude)
+    if (criteria.excludeStatus && item.status === criteria.excludeStatus) {
       return false
     }
 

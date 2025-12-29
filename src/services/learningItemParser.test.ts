@@ -221,5 +221,37 @@ describe('learningItemParser', () => {
 
       expect(criteria.progressMin).toBe('50%')
     })
+
+    test('parses status exclusion queries', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          message: {
+            content: '{"excludeStatus":"Archived"}',
+          },
+        }),
+      } as Response)
+
+      const criteria = await parseSearchQuery('show items that are not archived')
+
+      expect(criteria.excludeStatus).toBe('Archived')
+      expect(criteria.status).toBeUndefined()
+    })
+
+    test('parses type exclusion queries', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          message: {
+            content: '{"excludeType":"Book"}',
+          },
+        }),
+      } as Response)
+
+      const criteria = await parseSearchQuery('show items that are not books')
+
+      expect(criteria.excludeType).toBe('Book')
+      expect(criteria.type).toBeUndefined()
+    })
   })
 })
