@@ -153,3 +153,134 @@ export async function parseLearningItemFromMessage(message: string) {
   const parsed = PartialLearningItemSchema.parse(extractJson(content))
   return normalizeParsedItem(parsed, nowIso)
 }
+
+const EditItemUpdateSchema = z.object({
+  status: LearningItemStatus.optional(),
+  progress: z.string().optional(),
+  url: z.string().optional(),
+})
+
+type EditItemUpdate = z.infer<typeof EditItemUpdateSchema>
+
+function buildEditSystemPrompt(currentItem: {
+  title: string
+  author: string
+  type: string
+  status: string
+  progress: string
+  url?: string
+}) {
+  const itemContext = [
+    `Current item: "${currentItem.title}" by ${currentItem.author}`,
+    `Type: ${currentItem.type}`,
+    `Current status: ${currentItem.status}`,
+    `Current progress: ${currentItem.progress}`,
+  ]
+  if (currentItem.url) {
+    itemContext.push(`Current URL: ${currentItem.url}`)
+  }
+
+  return [
+    'You extract updates to a learning item from a user message.',
+    'Return ONLY a JSON object with these optional keys: status, progress, url.',
+    'Only include fields that the user wants to change.',
+    '',
+    ...itemContext,
+    '',
+    'Rules:',
+    '- status must be one of: "In Progress", "Completed", "On Hold", "Archived"',
+    '- If user mentions "archive", "archive this", "mark as archived", "archive it", or "set status to archived", always set status to "Archived"',
+    '- If archiving is mentioned, set status to "Archived" even if other status values are mentioned',
+    '- progress can be any string (e.g., "50%", "Chapter 5", "75%")',
+    '- url should be a valid URL string or omitted',
+    '- At least one field must be updated',
+  ].join('\n')
+}
+
+function normalizeEditUpdate(parsed: EditItemUpdate) {
+  const normalized: EditItemUpdate = {}
+
+  if (parsed.status !== undefined) {
+    normalized.status = parsed.status
+  }
+  if (parsed.progress !== undefined) {
+    normalized.progress = parsed.progress.trim()
+  }
+  if (parsed.url !== undefined) {
+    const trimmed = parsed.url.trim()
+    normalized.url = trimmed || undefined
+  }
+
+  // Validate at least one field is being updated
+  if (Object.keys(normalized).length === 0) {
+    throw new Error('No fields to update')
+  }
+
+  return normalized
+}
+
+async function callProviderForEdit(
+  config: ProviderConfig,
+  message: string,
+  currentItem: {
+    title: string
+    author: string
+    type: string
+    status: string
+    progress: string
+    url?: string
+  }
+) {
+  const systemPrompt = buildEditSystemPrompt(currentItem)
+  const payload = {
+    model: config.model,
+    stream: false,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: message },
+    ],
+  }
+
+  const url =
+    config.provider === 'ollama'
+      ? `${config.baseUrl}/api/chat`
+      : `${config.baseUrl}/v1/chat/completions`
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  }
+
+  if (config.provider === 'deepseek' && config.apiKey) {
+    headers.Authorization = `Bearer ${config.apiKey}`
+  }
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(payload),
+  })
+
+  if (!response.ok) {
+    throw new Error(`LLM request failed (${response.status})`)
+  }
+
+  return response.json() as Promise<any>
+}
+
+export async function parseEditItemFromMessage(
+  message: string,
+  currentItem: {
+    title: string
+    author: string
+    type: string
+    status: string
+    progress: string
+    url?: string
+  }
+) {
+  const config = getProviderConfig()
+  const data = await callProviderForEdit(config, message, currentItem)
+  const content = extractContent(config.provider, data)
+  const parsed = EditItemUpdateSchema.parse(extractJson(content))
+  return normalizeEditUpdate(parsed)
+}
