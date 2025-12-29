@@ -30,10 +30,14 @@ describe('s3Client', () => {
     // Get the instance of the mocked S3Client. As s3Client.ts creates one
     // instance at the module level, it will be the first and only instance.
     s3ClientInstance = vi.mocked(S3Client).mock.instances[0]
+    s3ClientInstance.send.mockReset()
+    vi.mocked(GetObjectCommand).mockClear()
+    vi.mocked(PutObjectCommand).mockClear()
   })
 
   afterEach(() => {
-    vi.clearAllMocks()
+    // vi.clearAllMocks() was removed because it clears mock.instances, which
+    // is not desirable when the instance is created only once at the module level.
   })
 
   describe('getDataFromS3', () => {
@@ -57,11 +61,8 @@ describe('s3Client', () => {
     })
 
     test('should return empty array if object does not exist (NoSuchKey)', async () => {
-      // Create an instance of the mocked NoSuchKey error
-      const mockError = new (vi.mocked(NoSuchKey, true))({
-        $metadata: {},
-        message: 'No Such Key',
-      })
+      const mockError = new Error('No Such Key')
+      mockError.name = 'NoSuchKey'
       s3ClientInstance.send.mockRejectedValue(mockError)
 
       const data = await getDataFromS3('test-bucket', 'test-key')
