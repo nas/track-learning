@@ -37,24 +37,56 @@ export function applySearchCriteria(
       }
     }
 
-    // Type filter (include)
-    if (criteria.type && item.type !== criteria.type) {
-      return false
+    // Type filter (include) - supports single value or array (OR logic)
+    if (criteria.type) {
+      if (Array.isArray(criteria.type)) {
+        if (!criteria.type.includes(item.type)) {
+          return false
+        }
+      } else {
+        if (item.type !== criteria.type) {
+          return false
+        }
+      }
     }
 
-    // Type filter (exclude)
-    if (criteria.excludeType && item.type === criteria.excludeType) {
-      return false
+    // Type filter (exclude) - supports single value or array (exclude if in array)
+    if (criteria.excludeType) {
+      if (Array.isArray(criteria.excludeType)) {
+        if (criteria.excludeType.includes(item.type)) {
+          return false
+        }
+      } else {
+        if (item.type === criteria.excludeType) {
+          return false
+        }
+      }
     }
 
-    // Status filter (include)
-    if (criteria.status && item.status !== criteria.status) {
-      return false
+    // Status filter (include) - supports single value or array (OR logic)
+    if (criteria.status) {
+      if (Array.isArray(criteria.status)) {
+        if (!criteria.status.includes(item.status)) {
+          return false
+        }
+      } else {
+        if (item.status !== criteria.status) {
+          return false
+        }
+      }
     }
 
-    // Status filter (exclude)
-    if (criteria.excludeStatus && item.status === criteria.excludeStatus) {
-      return false
+    // Status filter (exclude) - supports single value or array (exclude if in array)
+    if (criteria.excludeStatus) {
+      if (Array.isArray(criteria.excludeStatus)) {
+        if (criteria.excludeStatus.includes(item.status)) {
+          return false
+        }
+      } else {
+        if (item.status === criteria.excludeStatus) {
+          return false
+        }
+      }
     }
 
     // Progress filters

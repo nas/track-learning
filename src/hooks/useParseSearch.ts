@@ -2,10 +2,10 @@ import { useMutation } from '@tanstack/react-query'
 
 export type SearchCriteria = {
   searchText?: string
-  type?: string
-  excludeType?: string
-  status?: string
-  excludeStatus?: string
+  type?: string | string[]
+  excludeType?: string | string[]
+  status?: string | string[]
+  excludeStatus?: string | string[]
   progressMin?: string
   progressMax?: string
 }

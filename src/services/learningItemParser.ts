@@ -287,10 +287,10 @@ export async function parseEditItemFromMessage(
 
 const SearchCriteriaSchema = z.object({
   searchText: z.string().optional(),
-  type: LearningItemType.optional(),
-  excludeType: LearningItemType.optional(),
-  status: LearningItemStatus.optional(),
-  excludeStatus: LearningItemStatus.optional(),
+  type: z.union([LearningItemType, z.array(LearningItemType)]).optional(),
+  excludeType: z.union([LearningItemType, z.array(LearningItemType)]).optional(),
+  status: z.union([LearningItemStatus, z.array(LearningItemStatus)]).optional(),
+  excludeStatus: z.union([LearningItemStatus, z.array(LearningItemStatus)]).optional(),
   progressMin: z.string().optional(),
   progressMax: z.string().optional(),
 })
@@ -298,52 +298,76 @@ const SearchCriteriaSchema = z.object({
 type SearchCriteria = z.infer<typeof SearchCriteriaSchema>
 
 function buildSearchSystemPrompt() {
+  // Extract enum values dynamically from schema
+  // Zod enums store values in _def.entries object
+  const validTypes = Object.values((LearningItemType._def as any).entries) as string[]
+  const validStatuses = Object.values((LearningItemStatus._def as any).entries) as string[]
+  
   return [
     'You extract search criteria from a user search query.',
     'Return ONLY a JSON object with these optional keys:',
     'searchText, type, excludeType, status, excludeStatus, progressMin, progressMax.',
     '',
+    'Field definitions:',
+    `- type: string or array - valid values: ${validTypes.map(t => `"${t}"`).join(', ')}`,
+    `- excludeType: string or array - valid values: ${validTypes.map(t => `"${t}"`).join(', ')}`,
+    `- status: string or array - valid values: ${validStatuses.map(s => `"${s}"`).join(', ')}`,
+    `- excludeStatus: string or array - valid values: ${validStatuses.map(s => `"${s}"`).join(', ')}`,
+    '- searchText: string - keywords to search in title or author',
+    '- progressMin: string - minimum progress (e.g., "20%" for "more than 20%")',
+    '- progressMax: string - maximum progress (e.g., "30%" for "less than 30%")',
+    '',
     'Rules:',
-    '- searchText: keywords to search in title or author (e.g., "pragmatic", "programming")',
-    '- type: one of "Book", "Course", "Article" if user specifies a type to include',
-    '- excludeType: one of "Book", "Course", "Article" if user wants to exclude a type',
-    '- status: one of "In Progress", "Completed", "On Hold", "Archived" if user specifies a status to include',
-    '- excludeStatus: one of "In Progress", "Completed", "On Hold", "Archived" if user wants to exclude a status',
-    '- progressMin: minimum progress (e.g., "50%" for "more than 50%", "at least 50%")',
-    '- progressMax: maximum progress (e.g., "30%" for "less than 30%", "under 30%")',
-    '- If user says "completed items", set status to "Completed"',
-    '- If user says "in progress", set status to "In Progress"',
-    '- If user says "archived", set status to "Archived"',
-    '- If user says "not archived", "non-archived", "exclude archived", or "without archived", set excludeStatus to "Archived"',
-    '- If user says "not completed", "non-completed", "exclude completed", set excludeStatus to "Completed"',
-    '- If user says "not in progress", "exclude in progress", set excludeStatus to "In Progress"',
-    '- If user says "books", "book", set type to "Book"',
-    '- If user says "courses", "course", set type to "Course"',
-    '- If user says "articles", "article", set type to "Article"',
-    '- If user says "not a book", "not books", "exclude books", "non-books", set excludeType to "Book"',
-    '- If user says "not a course", "not courses", "exclude courses", "non-courses", set excludeType to "Course"',
-    '- If user says "not an article", "not articles", "exclude articles", "non-articles", set excludeType to "Article"',
-    '- Extract keywords from the query for searchText',
-    '- If no specific criteria, return empty object or just searchText',
+    '- Use a single string for one value, an array for multiple values (OR logic)',
+    '- For "not X" or "exclude X", use excludeType or excludeStatus',
+    '- Omit fields that are not applicable (do not use empty strings)',
+    '',
+    'Examples:',
+    'Query: "find items that are books and more than 20% complete"',
+    'Response: {"type": "Book", "progressMin": "20%"}',
+    '',
+    'Query: "find items that are course or book"',
+    'Response: {"type": ["Course", "Book"]}',
+    '',
+    'Query: "find items that are not course or book"',
+    'Response: {"excludeType": ["Course", "Book"]}',
+    '',
+    'Query: "find completed or in progress items"',
+    'Response: {"status": ["Completed", "In Progress"]}',
+    '',
+    'Query: "find items that are not archived"',
+    'Response: {"excludeStatus": "Archived"}',
   ].join('\n')
 }
 
 function normalizeSearchCriteria(parsed: SearchCriteria) {
-  const normalized: SearchCriteria = {}
+  const normalized: {
+    searchText?: string
+    type?: LearningItemType | LearningItemType[]
+    excludeType?: LearningItemType | LearningItemType[]
+    status?: LearningItemStatus | LearningItemStatus[]
+    excludeStatus?: LearningItemStatus | LearningItemStatus[]
+    progressMin?: string
+    progressMax?: string
+  } = {}
 
   if (parsed.searchText !== undefined && parsed.searchText.trim()) {
     normalized.searchText = parsed.searchText.trim()
   }
   if (parsed.type !== undefined) {
+    // Keep arrays as arrays, single values as single values
     normalized.type = parsed.type
   }
   if (parsed.excludeType !== undefined) {
+    // Keep arrays as arrays, single values as single values
     normalized.excludeType = parsed.excludeType
   }
   if (parsed.status !== undefined) {
+    // Keep arrays as arrays, single values as single values
     normalized.status = parsed.status
   }
   if (parsed.excludeStatus !== undefined) {
+    // Keep arrays as arrays, single values as single values
     normalized.excludeStatus = parsed.excludeStatus
   }
   if (parsed.progressMin !== undefined && parsed.progressMin.trim()) {
@@ -396,10 +420,92 @@ async function callProviderForSearch(
   return response.json() as Promise<any>
 }
 
+function preprocessSearchCriteria(raw: any): any {
+  const preprocessed: any = { ...raw }
+  
+  const validTypes = ['Book', 'Course', 'Article']
+  const validStatuses = ['In Progress', 'Completed', 'On Hold', 'Archived']
+  
+  // Helper to clean enum fields - supports arrays for multiple values
+  const cleanEnumField = (field: string, validValues: string[]) => {
+    if (preprocessed[field] === undefined || preprocessed[field] === null) {
+      delete preprocessed[field]
+      return
+    }
+    
+    // Handle empty strings
+    if (preprocessed[field] === '') {
+      delete preprocessed[field]
+      return
+    }
+    
+    // Handle arrays
+    if (Array.isArray(preprocessed[field])) {
+      if (preprocessed[field].length === 0) {
+        delete preprocessed[field]
+        return
+      }
+      
+      // Filter to only valid values
+      const validArray = preprocessed[field].filter((v: string) => validValues.includes(v))
+      
+      if (validArray.length === 0) {
+        delete preprocessed[field]
+        return
+      }
+      
+      // If all enum values are present, remove it (LLM confusion)
+      if (validArray.length === validValues.length && 
+          validValues.every(v => validArray.includes(v))) {
+        delete preprocessed[field]
+        return
+      }
+      
+      // If only one valid value, use single value
+      if (validArray.length === 1) {
+        preprocessed[field] = validArray[0]
+      } else {
+        // Multiple valid values - keep as array
+        preprocessed[field] = validArray
+      }
+      return
+    }
+    
+    // Handle single values
+    if (!validValues.includes(preprocessed[field])) {
+      delete preprocessed[field]
+      return
+    }
+  }
+  
+  // Clean enum fields
+  cleanEnumField('type', validTypes)
+  cleanEnumField('excludeType', validTypes)
+  cleanEnumField('status', validStatuses)
+  cleanEnumField('excludeStatus', validStatuses)
+  
+  // Also clean empty strings from other fields
+  if (preprocessed.searchText === '') {
+    delete preprocessed.searchText
+  }
+  if (preprocessed.progressMin === '') {
+    delete preprocessed.progressMin
+  }
+  if (preprocessed.progressMax === '') {
+    delete preprocessed.progressMax
+  }
+  
+  return preprocessed
+}
+
 export async function parseSearchQuery(message: string) {
   const config = getProviderConfig()
   const data = await callProviderForSearch(config, message)
   const content = extractContent(config.provider, data)
-  const parsed = SearchCriteriaSchema.parse(extractJson(content))
+  const rawJson = extractJson(content)
+  console.log('Raw JSON from LLM:', JSON.stringify(rawJson, null, 2))
+  const preprocessed = preprocessSearchCriteria(rawJson)
+  console.log('Preprocessed:', JSON.stringify(preprocessed, null, 2))
+  const parsed = SearchCriteriaSchema.parse(preprocessed)
   return normalizeSearchCriteria(parsed)
 }
