@@ -124,7 +124,7 @@ export function AddItemChat({ onSuccess }: { onSuccess?: () => void }) {
     <div className="flex flex-col gap-4">
       <div
         ref={listRef}
-        className="max-h-72 overflow-y-auto rounded-2xl border bg-muted/20 p-4 space-y-3"
+        className="max-h-72 overflow-y-auto rounded-2xl bg-muted/20 p-4 space-y-3"
       >
         {messages.map((message, index) => (
           <div
@@ -135,7 +135,7 @@ export function AddItemChat({ onSuccess }: { onSuccess?: () => void }) {
               className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm shadow-sm ${
                 message.role === 'user'
                   ? 'bg-blue-600 text-white'
-                  : 'bg-white text-foreground border'
+                  : 'bg-gray-50 text-foreground'
               }`}
             >
               {message.content}
@@ -144,7 +144,7 @@ export function AddItemChat({ onSuccess }: { onSuccess?: () => void }) {
         ))}
         {isParsing && (
           <div className="flex justify-start">
-            <div className="max-w-[85%] rounded-2xl px-4 py-3 text-sm border bg-white text-foreground">
+            <div className="max-w-[85%] rounded-2xl px-4 py-3 text-sm bg-gray-50 text-foreground">
               Thinking...
             </div>
           </div>
@@ -152,7 +152,7 @@ export function AddItemChat({ onSuccess }: { onSuccess?: () => void }) {
       </div>
 
       {pendingItem && (
-        <div className="rounded-2xl border bg-background p-4 space-y-3">
+        <div className="rounded-2xl bg-background p-4 space-y-3">
           <div>
             <p className="text-sm font-semibold">Parsed details</p>
             <p className="whitespace-pre-wrap text-sm text-muted-foreground">
@@ -184,7 +184,7 @@ export function AddItemChat({ onSuccess }: { onSuccess?: () => void }) {
           value={input}
           onChange={(event) => setInput(event.target.value)}
           placeholder='e.g. "Atomic Habits by James Clear, 35% done, started Jan 2, url https://..."'
-          className="w-full rounded-2xl border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="w-full rounded-2xl border border-gray-200 bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         />
       </div>
 
