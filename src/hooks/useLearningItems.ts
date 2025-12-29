@@ -11,5 +11,6 @@ export function useLearningItems() {
       }
       return response.json()
     },
+    refetchOnWindowFocus: false,
   })
 }
