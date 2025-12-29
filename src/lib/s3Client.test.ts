@@ -2,7 +2,6 @@ import {
   S3Client,
   GetObjectCommand,
   PutObjectCommand,
-  NoSuchKey,
 } from '@aws-sdk/client-s3'
 import { expect, test, vi, describe, beforeEach, afterEach } from 'vitest'
 import { getDataFromS3, putDataToS3 } from './s3Client'
@@ -61,8 +60,7 @@ describe('s3Client', () => {
     })
 
     test('should return empty array if object does not exist (NoSuchKey)', async () => {
-      const mockError = new Error('No Such Key')
-      mockError.name = 'NoSuchKey'
+      const mockError = { name: 'NoSuchKey' }
       s3ClientInstance.send.mockRejectedValue(mockError)
 
       const data = await getDataFromS3('test-bucket', 'test-key')
