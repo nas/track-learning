@@ -83,7 +83,7 @@ describe('applySearchCriteria', () => {
 
   test('filters by combined criteria', () => {
     const criteria: SearchCriteria = {
-      searchText: 'programming',
+      searchText: 'pragmatic',
       type: 'Book',
       status: 'In Progress',
     }

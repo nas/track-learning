@@ -3,7 +3,7 @@
 import { useLearningItems } from "@/hooks/useLearningItems"
 import { ItemCard } from "./item-card"
 import { SearchFilters } from "./search-filters"
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { EmptyState } from "./empty-state"
 import { Loader2, AlertCircle } from "lucide-react"
@@ -17,6 +17,12 @@ export function DashboardContent() {
   const [debouncedSearch, setDebouncedSearch] = useState("")
   
   const { mutateAsync: parseSearch, isPending: isParsingSearch } = useParseSearch()
+  const parseSearchRef = useRef(parseSearch)
+  
+  // Keep ref updated
+  useEffect(() => {
+    parseSearchRef.current = parseSearch
+  }, [parseSearch])
 
   // Debounce search input
   useEffect(() => {
@@ -30,7 +36,7 @@ export function DashboardContent() {
   // Parse search query with LLM when debounced search changes
   useEffect(() => {
     if (debouncedSearch.trim()) {
-      parseSearch(debouncedSearch)
+      parseSearchRef.current(debouncedSearch)
         .then((criteria) => {
           setSearchCriteria(criteria)
         })
@@ -41,7 +47,7 @@ export function DashboardContent() {
     } else {
       setSearchCriteria(null)
     }
-  }, [debouncedSearch, parseSearch])
+  }, [debouncedSearch])
 
   const filteredItems = useMemo(() => {
     if (!items) return []

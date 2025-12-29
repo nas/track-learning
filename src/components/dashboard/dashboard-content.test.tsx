@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react'
-import { expect, test, vi } from 'vitest'
+import { render, screen, waitFor } from '@testing-library/react'
+import { expect, test, vi, beforeEach } from 'vitest'
 import { DashboardContent } from './dashboard-content'
 import { useLearningItems } from '@/hooks/useLearningItems'
 import { useParseSearch } from '@/hooks/useParseSearch'
@@ -13,25 +13,39 @@ const mockItems = [
   { id: "1", title: "Test Item", author: "Author", type: "Book", status: "In Progress", progress: "10%", startDate: "2025-01-01T00:00:00Z", lastUpdated: "2025-01-01T00:00:00Z" }
 ]
 
+const mockParseSearch = vi.fn().mockResolvedValue({})
+
+beforeEach(() => {
+  vi.clearAllMocks()
+  vi.mocked(useParseSearch).mockReturnValue({
+    mutateAsync: mockParseSearch,
+    isPending: false,
+  } as any)
+})
+
 test('DashboardContent renders items from hook', async () => {
   vi.mocked(useLearningItems).mockReturnValue({
     data: mockItems,
     isLoading: false,
     isError: false,
   } as any)
-  vi.mocked(useParseSearch).mockReturnValue({
-    mutateAsync: vi.fn(),
-    isPending: false,
-  } as any)
 
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  })
+  
   render(
     <QueryClientProvider client={queryClient}>
       <DashboardContent />
     </QueryClientProvider>
   )
 
-  expect(screen.getByText("Test Item")).toBeDefined()
+  await waitFor(() => {
+    expect(screen.getByText("Test Item")).toBeInTheDocument()
+  }, { timeout: 3000 })
 })
 
 test('DashboardContent displays Archived items at the end', async () => {
@@ -46,17 +60,24 @@ test('DashboardContent displays Archived items at the end', async () => {
     isLoading: false,
     isError: false,
   } as any)
-  vi.mocked(useParseSearch).mockReturnValue({
-    mutateAsync: vi.fn(),
-    isPending: false,
-  } as any)
 
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  })
+  
   const { container } = render(
     <QueryClientProvider client={queryClient}>
       <DashboardContent />
     </QueryClientProvider>
   )
+
+  await waitFor(() => {
+    const itemCards = container.querySelectorAll('[aria-label="learning-items-grid"] > div')
+    expect(itemCards.length).toBeGreaterThan(0)
+  }, { timeout: 3000 })
 
   const itemCards = container.querySelectorAll('[aria-label="learning-items-grid"] > div')
   const itemTitles = Array.from(itemCards).map(card => card.textContent)
@@ -70,10 +91,6 @@ test('DashboardContent displays loading state', async () => {
     data: undefined,
     isLoading: true,
     isError: false,
-  } as any)
-  vi.mocked(useParseSearch).mockReturnValue({
-    mutateAsync: vi.fn(),
-    isPending: false,
   } as any)
 
   const queryClient = new QueryClient()
@@ -92,17 +109,21 @@ test('DashboardContent displays empty state when no items', async () => {
     isLoading: false,
     isError: false,
   } as any)
-  vi.mocked(useParseSearch).mockReturnValue({
-    mutateAsync: vi.fn(),
-    isPending: false,
-  } as any)
 
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  })
+  
   render(
     <QueryClientProvider client={queryClient}>
       <DashboardContent />
     </QueryClientProvider>
   )
 
-  expect(screen.getByText(/Your dashboard is empty/i)).toBeInTheDocument()
+  await waitFor(() => {
+    expect(screen.getByText(/Your dashboard is empty/i)).toBeInTheDocument()
+  }, { timeout: 3000 })
 })

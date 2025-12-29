@@ -3,9 +3,11 @@ import { expect, test, vi } from 'vitest'
 import { EditItemDialog } from './edit-item-dialog'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useUpdateItem } from '@/hooks/useUpdateItem'
+import { useParseEditItem } from '@/hooks/useParseEditItem'
 import { LearningItem } from '@/lib/schemas/learning-item'
 
 vi.mock('@/hooks/useUpdateItem')
+vi.mock('@/hooks/useParseEditItem')
 
 const mockItem: LearningItem = {
   id: "1",
@@ -14,15 +16,22 @@ const mockItem: LearningItem = {
   type: "Book",
   status: "In Progress",
   progress: "50%",
-  startDate: "",
-  lastUpdated: "",
+  startDate: "2025-01-01T00:00:00.000Z",
+  lastUpdated: "2025-01-01T00:00:00.000Z",
   url: "https://initial.com"
 }
 
 test('updates item with new url', async () => {
-  const mutate = vi.fn()
+  const parseEdit = vi.fn().mockResolvedValue({ url: 'https://updated.com' })
+  const updateItem = vi.fn()
+  
+  vi.mocked(useParseEditItem).mockReturnValue({
+    mutateAsync: parseEdit,
+    isPending: false,
+  } as any)
+  
   vi.mocked(useUpdateItem).mockReturnValue({
-    mutate,
+    mutate: updateItem,
     isPending: false,
   } as any)
 
@@ -35,11 +44,16 @@ test('updates item with new url', async () => {
 
   fireEvent.click(screen.getByRole('button', { name: /Edit/i }))
   
-  fireEvent.change(screen.getByLabelText(/URL/i), { target: { value: 'https://updated.com' } })
-  
-  fireEvent.click(screen.getByRole('button', { name: /Save/i }))
+  const input = screen.getByPlaceholderText(/update progress/i)
+  fireEvent.change(input, { target: { value: 'update url to https://updated.com' } })
+  fireEvent.click(screen.getByRole('button', { name: /Send/i }))
 
-  await waitFor(() => expect(mutate).toHaveBeenCalledWith(
+  await waitFor(() => expect(parseEdit).toHaveBeenCalled())
+  await waitFor(() => expect(screen.getByRole('button', { name: /Confirm & Save/i })).toBeInTheDocument())
+  
+  fireEvent.click(screen.getByRole('button', { name: /Confirm & Save/i }))
+
+  await waitFor(() => expect(updateItem).toHaveBeenCalledWith(
     expect.objectContaining({
       id: "1",
       updates: expect.objectContaining({ url: "https://updated.com" })
