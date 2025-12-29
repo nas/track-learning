@@ -2,7 +2,6 @@ import {
   S3Client,
   GetObjectCommand,
   PutObjectCommand,
-  NoSuchKey,
 } from '@aws-sdk/client-s3'
 import { LearningItem } from './schemas/learning-item'
 
@@ -31,7 +30,7 @@ export async function getDataFromS3(
     }
     return JSON.parse(content) as LearningItem[]
   } catch (error) {
-    if (error instanceof NoSuchKey) {
+    if ((error as Error).name === 'NoSuchKey') {
       // File doesn't exist, which is a valid state (no items yet)
       return []
     }
