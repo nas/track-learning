@@ -1,41 +1,16 @@
 import { expect, test, vi, beforeEach, describe } from 'vitest'
-import { addLearningItem, updateLearningItem, getLearningItems } from '../../services/learningService'
-import fs from 'fs'
-import path from 'path'
+import { addLearningItem, updateLearningItem } from '../../services/learningService'
+import { getDataFromS3, putDataToS3 } from '../../lib/s3Client'
 
-// Explicitly mock fs
-vi.mock('fs', () => ({
-  default: {
-    readFileSync: vi.fn(),
-    writeFileSync: vi.fn(),
-    existsSync: vi.fn(),
-  },
-  readFileSync: vi.fn(),
-  writeFileSync: vi.fn(),
-  existsSync: vi.fn(),
-}))
-
-vi.mock('path', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('path')>()
-  return {
-    ...actual,
-    default: {
-      ...actual,
-      resolve: vi.fn(() => '/mock/data/learning-items.json'),
-    },
-    resolve: vi.fn(() => '/mock/data/learning-items.json'),
-  }
-})
+vi.mock('../../lib/s3Client')
 
 describe('learningService with URL', () => {
   beforeEach(() => {
     vi.resetAllMocks()
-    vi.mocked(path.resolve).mockReturnValue('/mock/data/learning-items.json')
   })
 
   test('addLearningItem saves url if provided', async () => {
-    vi.mocked(fs.existsSync).mockReturnValue(true)
-    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify([]))
+    vi.mocked(getDataFromS3).mockResolvedValue([])
     
     const newItem = {
       title: "New Course",
@@ -51,8 +26,8 @@ describe('learningService with URL', () => {
 
     expect(addedItem.url).toBe("https://example.com")
     
-    // Verify content written to file
-    const writtenData = JSON.parse(vi.mocked(fs.writeFileSync).mock.calls[0][1] as string)
+    // Verify content written to S3
+    const writtenData = vi.mocked(putDataToS3).mock.calls[0][2] as any[]
     expect(writtenData[0].url).toBe("https://example.com")
   })
 
@@ -70,8 +45,7 @@ describe('learningService with URL', () => {
         url: "https://old.com"
       }
     ]
-    vi.mocked(fs.existsSync).mockReturnValue(true)
-    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify(existingData))
+    vi.mocked(getDataFromS3).mockResolvedValue(existingData)
 
     const updates = {
         url: "https://new.com"
@@ -81,7 +55,7 @@ describe('learningService with URL', () => {
 
     expect(updatedItem.url).toBe("https://new.com")
     
-    const writtenData = JSON.parse(vi.mocked(fs.writeFileSync).mock.calls[0][1] as string)
+    const writtenData = vi.mocked(putDataToS3).mock.calls[0][2] as any[]
     expect(writtenData[0].url).toBe("https://new.com")
   })
 })
