@@ -1,47 +1,33 @@
 'use client'
 
-import { LearningItemType } from "@/lib/schemas/learning-item"
-
 interface SearchFiltersProps {
   search: string
-  typeFilter: string
   onSearchChange: (value: string) => void
-  onTypeFilterChange: (value: string) => void
+  isParsing?: boolean
 }
 
 export function SearchFilters({
   search,
-  typeFilter,
   onSearchChange,
-  onTypeFilterChange,
+  isParsing = false,
 }: SearchFiltersProps) {
   return (
-    <div className="flex flex-col md:flex-row gap-4 mb-6">
-      <div className="flex-1">
+    <div className="mb-6">
+      <div className="relative">
         <label htmlFor="search" className="sr-only">Search</label>
         <input
           id="search"
           type="text"
-          placeholder="Search items..."
+          placeholder='Search items... (e.g., "completed books", "in progress courses", "items with 50% progress", "books only")'
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 border rounded-md pr-10"
         />
-      </div>
-      <div className="w-full md:w-48">
-        <label htmlFor="type-filter" className="sr-only">Filter by Type</label>
-        <select
-          id="type-filter"
-          aria-label="Filter by Type"
-          value={typeFilter}
-          onChange={(e) => onTypeFilterChange(e.target.value)}
-          className="w-full p-2 border rounded-md"
-        >
-          <option value="All">All Types</option>
-          {LearningItemType.options.map((t) => (
-            <option key={t} value={t}>{t}</option>
-          ))}
-        </select>
+        {isParsing && (
+          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+            <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        )}
       </div>
     </div>
   )

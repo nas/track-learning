@@ -1,5 +1,5 @@
 import { expect, test, vi, describe, beforeEach, afterEach } from 'vitest'
-import { parseLearningItemFromMessage, parseEditItemFromMessage } from './learningItemParser'
+import { parseLearningItemFromMessage, parseEditItemFromMessage, parseSearchQuery } from './learningItemParser'
 
 describe('learningItemParser', () => {
   const originalEnv = process.env
@@ -139,6 +139,87 @@ describe('learningItemParser', () => {
       } as Response)
 
       await expect(parseEditItemFromMessage('nothing', currentItem)).rejects.toThrow('No fields to update')
+    })
+  })
+
+  describe('parseSearchQuery', () => {
+    test('parses simple text search', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          message: {
+            content: '{"searchText":"pragmatic"}',
+          },
+        }),
+      } as Response)
+
+      const criteria = await parseSearchQuery('pragmatic')
+
+      expect(criteria.searchText).toBe('pragmatic')
+      expect(criteria.type).toBeUndefined()
+      expect(criteria.status).toBeUndefined()
+    })
+
+    test('parses status filter', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          message: {
+            content: '{"status":"Completed"}',
+          },
+        }),
+      } as Response)
+
+      const criteria = await parseSearchQuery('completed items')
+
+      expect(criteria.status).toBe('Completed')
+    })
+
+    test('parses type filter', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          message: {
+            content: '{"type":"Book"}',
+          },
+        }),
+      } as Response)
+
+      const criteria = await parseSearchQuery('books')
+
+      expect(criteria.type).toBe('Book')
+    })
+
+    test('parses combined search criteria', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          message: {
+            content: '{"searchText":"programming","type":"Book","status":"In Progress"}',
+          },
+        }),
+      } as Response)
+
+      const criteria = await parseSearchQuery('in progress programming books')
+
+      expect(criteria.searchText).toBe('programming')
+      expect(criteria.type).toBe('Book')
+      expect(criteria.status).toBe('In Progress')
+    })
+
+    test('parses progress filters', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          message: {
+            content: '{"progressMin":"50%"}',
+          },
+        }),
+      } as Response)
+
+      const criteria = await parseSearchQuery('items with more than 50% progress')
+
+      expect(criteria.progressMin).toBe('50%')
     })
   })
 })

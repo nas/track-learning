@@ -284,3 +284,104 @@ export async function parseEditItemFromMessage(
   const parsed = EditItemUpdateSchema.parse(extractJson(content))
   return normalizeEditUpdate(parsed)
 }
+
+const SearchCriteriaSchema = z.object({
+  searchText: z.string().optional(),
+  type: LearningItemType.optional(),
+  status: LearningItemStatus.optional(),
+  progressMin: z.string().optional(),
+  progressMax: z.string().optional(),
+})
+
+type SearchCriteria = z.infer<typeof SearchCriteriaSchema>
+
+function buildSearchSystemPrompt() {
+  return [
+    'You extract search criteria from a user search query.',
+    'Return ONLY a JSON object with these optional keys:',
+    'searchText, type, status, progressMin, progressMax.',
+    '',
+    'Rules:',
+    '- searchText: keywords to search in title or author (e.g., "pragmatic", "programming")',
+    '- type: one of "Book", "Course", "Article" if user specifies a type',
+    '- status: one of "In Progress", "Completed", "On Hold", "Archived" if user specifies a status',
+    '- progressMin: minimum progress (e.g., "50%" for "more than 50%", "at least 50%")',
+    '- progressMax: maximum progress (e.g., "30%" for "less than 30%", "under 30%")',
+    '- If user says "completed items", set status to "Completed"',
+    '- If user says "in progress", set status to "In Progress"',
+    '- If user says "archived", set status to "Archived"',
+    '- If user mentions a book/course/article type, set the type field',
+    '- Extract keywords from the query for searchText',
+    '- If no specific criteria, return empty object or just searchText',
+  ].join('\n')
+}
+
+function normalizeSearchCriteria(parsed: SearchCriteria) {
+  const normalized: SearchCriteria = {}
+
+  if (parsed.searchText !== undefined && parsed.searchText.trim()) {
+    normalized.searchText = parsed.searchText.trim()
+  }
+  if (parsed.type !== undefined) {
+    normalized.type = parsed.type
+  }
+  if (parsed.status !== undefined) {
+    normalized.status = parsed.status
+  }
+  if (parsed.progressMin !== undefined && parsed.progressMin.trim()) {
+    normalized.progressMin = parsed.progressMin.trim()
+  }
+  if (parsed.progressMax !== undefined && parsed.progressMax.trim()) {
+    normalized.progressMax = parsed.progressMax.trim()
+  }
+
+  return normalized
+}
+
+async function callProviderForSearch(
+  config: ProviderConfig,
+  message: string
+) {
+  const systemPrompt = buildSearchSystemPrompt()
+  const payload = {
+    model: config.model,
+    stream: false,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: message },
+    ],
+  }
+
+  const url =
+    config.provider === 'ollama'
+      ? `${config.baseUrl}/api/chat`
+      : `${config.baseUrl}/v1/chat/completions`
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  }
+
+  if (config.provider === 'deepseek' && config.apiKey) {
+    headers.Authorization = `Bearer ${config.apiKey}`
+  }
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(payload),
+  })
+
+  if (!response.ok) {
+    throw new Error(`LLM request failed (${response.status})`)
+  }
+
+  return response.json() as Promise<any>
+}
+
+export async function parseSearchQuery(message: string) {
+  const config = getProviderConfig()
+  const data = await callProviderForSearch(config, message)
+  const content = extractContent(config.provider, data)
+  const parsed = SearchCriteriaSchema.parse(extractJson(content))
+  return normalizeSearchCriteria(parsed)
+}

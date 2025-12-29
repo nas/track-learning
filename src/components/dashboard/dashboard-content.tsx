@@ -3,15 +3,64 @@
 import { useLearningItems } from "@/hooks/useLearningItems"
 import { ItemCard } from "./item-card"
 import { SearchFilters } from "./search-filters"
-import { useState } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { EmptyState } from "./empty-state"
 import { Loader2, AlertCircle } from "lucide-react"
+import { useParseSearch, SearchCriteria } from "@/hooks/useParseSearch"
+import { applySearchCriteria } from "@/lib/searchUtils"
 
 export function DashboardContent() {
   const { data: items, isLoading, isError } = useLearningItems()
   const [search, setSearch] = useState("")
-  const [typeFilter, setTypeFilter] = useState("All")
+  const [searchCriteria, setSearchCriteria] = useState<SearchCriteria | null>(null)
+  const [debouncedSearch, setDebouncedSearch] = useState("")
+  
+  const { mutateAsync: parseSearch, isPending: isParsingSearch } = useParseSearch()
+
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search)
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [search])
+
+  // Parse search query with LLM when debounced search changes
+  useEffect(() => {
+    if (debouncedSearch.trim()) {
+      parseSearch(debouncedSearch)
+        .then((criteria) => {
+          setSearchCriteria(criteria)
+        })
+        .catch(() => {
+          // Fallback to simple text search on error
+          setSearchCriteria({ searchText: debouncedSearch })
+        })
+    } else {
+      setSearchCriteria(null)
+    }
+  }, [debouncedSearch, parseSearch])
+
+  const filteredItems = useMemo(() => {
+    if (!items) return []
+    
+    let result = items
+    
+    if (searchCriteria) {
+      result = applySearchCriteria(items, searchCriteria)
+    }
+    
+    // Sort: Archived items at the end
+    return result.sort((a, b) => {
+      if (a.status === "Archived" && b.status !== "Archived") return 1
+      if (a.status !== "Archived" && b.status === "Archived") return -1
+      return 0
+    })
+  }, [items, searchCriteria])
+
+  const isSearching = search !== ""
 
   if (isLoading) {
     return (
@@ -32,27 +81,12 @@ export function DashboardContent() {
     )
   }
 
-  const filteredItems = items?.filter((item) => {
-    const matchesSearch = item.title.toLowerCase().includes(search.toLowerCase()) || 
-                          item.author.toLowerCase().includes(search.toLowerCase())
-    const matchesType = typeFilter === "All" || item.type === typeFilter
-    return matchesSearch && matchesType
-  })?.sort((a, b) => {
-    // Put Archived items at the end
-    if (a.status === "Archived" && b.status !== "Archived") return 1
-    if (a.status !== "Archived" && b.status === "Archived") return -1
-    return 0
-  })
-
-  const isSearching = search !== "" || typeFilter !== "All"
-
   return (
     <div className="flex flex-col gap-8">
       <SearchFilters 
         search={search}
         onSearchChange={setSearch}
-        typeFilter={typeFilter}
-        onTypeFilterChange={setTypeFilter}
+        isParsing={isParsingSearch}
       />
       
       {filteredItems && filteredItems.length > 0 ? (
