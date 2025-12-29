@@ -8,6 +8,7 @@ import {
 const PartialLearningItemSchema = z.object({
   title: z.string().optional(),
   author: z.string().optional(),
+  website: z.string().optional(),
   type: LearningItemType.optional(),
   status: LearningItemStatus.optional(),
   progress: z.string().optional(),
@@ -55,8 +56,10 @@ function buildSystemPrompt(nowIso: string) {
   return [
     'You extract a learning item from a user message.',
     'Return ONLY a JSON object with these keys:',
-    'title, author, type, status, progress, url, startDate.',
+    'title, author or website, type, status, progress, url, startDate.',
     'Use enums: type in ["Book","Course","Article"], status in ["In Progress","Completed","On Hold","Archived"].',
+    'Progress is a percentage or a string like "0%" or "100%".',
+    'Response may include an author or website name. If both are provided, use the author.',
     'If a field is missing, omit it or use a sensible default.',
     `Use ISO 8601 for startDate. If not provided, use ${nowIso}.`,
   ].join(' ')
@@ -74,9 +77,10 @@ function extractJson(text: string) {
 }
 
 function normalizeParsedItem(parsed: PartialLearningItem, nowIso: string) {
+  console.log('parsed', parsed)
   const normalized = {
     title: parsed.title?.trim() ?? '',
-    author: parsed.author?.trim() || 'Unknown',
+    author: parsed.author?.trim() || parsed.website?.trim() || 'Unknown',
     type: parsed.type ?? 'Book',
     status: parsed.status ?? 'In Progress',
     progress: parsed.progress?.trim() || '0%',
@@ -145,6 +149,7 @@ export async function parseLearningItemFromMessage(message: string) {
   const config = getProviderConfig()
   const data = await callProvider(config, message, nowIso)
   const content = extractContent(config.provider, data)
+  console.log('content', content)
   const parsed = PartialLearningItemSchema.parse(extractJson(content))
   return normalizeParsedItem(parsed, nowIso)
 }
