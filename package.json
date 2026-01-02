@@ -4,8 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:sst": "sst dev",
     "build": "next build",
+    "build:sst": "sst build",
     "start": "next start",
+    "deploy": "sst deploy",
+    "deploy:prod": "sst deploy --stage production",
+    "remove": "sst remove",
+    "remove:prod": "sst remove --stage production",
     "lint": "eslint",
     "test": "vitest"
   },
@@ -39,6 +45,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "jsdom": "^27.4.0",
+    "sst": "^3.0.0",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.0.16"

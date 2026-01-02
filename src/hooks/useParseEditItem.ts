@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query'
-import { LearningItem } from '@/lib/schemas/learning-item'
+import { LearningItem, LearningItemStatus } from '@/lib/schemas/learning-item'
 
 export type EditItemUpdates = {
-  status?: string
+  status?: LearningItemStatus
   progress?: string
   url?: string
 }
