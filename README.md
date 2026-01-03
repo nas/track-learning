@@ -2,7 +2,7 @@ Simple minimal personal learning tracker app.
 
 Uses LLM for adding, updating and searching learning items. Can be used with one running locally or externally via api.
 
-To keep things simple, data is stored and read from AWS S3 json file. 
+To keep things simple, data is stored and read from AWS S3 json file.
 
 Example file data:
 ```
@@ -38,3 +38,12 @@ npm install
 npm run test
 npm run dev
 ```
+
+## Authentication
+
+The app uses a simple password-based authentication system for single-user access. Set the `AUTH_SECRET` environment variable. The login page prompts for this password to access the application.
+
+## Deployment
+
+For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md). 
+
